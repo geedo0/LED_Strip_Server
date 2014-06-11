@@ -9,7 +9,7 @@ int main() {
 	int fd;
 	
 	fd = serialOpen("/dev/ttyAMA0", 9600);
-	putBuffer(fd, sendBuffer, 5); 
+	setSinglePixel(fd, 15, getColor(200, 0, 0));
 	serialClose(fd);	
 	
 	return 0;
