@@ -3,7 +3,6 @@
 #define NUM_PIXELS	29
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_PIXELS, 6, NEO_GRB + NEO_KHZ800);
 
-
 void setup() {
 	Serial.begin(9600);
 	strip.begin();
@@ -14,40 +13,45 @@ void loop() {
 }
 
 void serialEvent() {
-	char buffer[10];
-	int count = 0;
+	char buffer[20];
+	int index;
+	long color;
 	
-	int size = Serial.read();
-	while(Serial.available() != size);
-	while(Serial.available())
-		buffer[count++] = Serial.read();
+	//Obtain Transmission length
+	while(Serial.available() < 2);
+	buffer[0] = Serial.read();
+	buffer[1] = Serial.read();
+	buffer[2] = 0x00;
+	int size = strtoul(buffer, NULL, 16);
+	Serial.readBytes(buffer, size);
 	
 	switch(buffer[0]) {
-		case 0x00:
+		case 'a':
 			/*
 			*	Set the entire strip to a single color
-			*	Format:	RGB		Size: 4
+			*	Format:	RGB		Size: 7
 			*	Where:	RGB = Color
 			*/
-			setAllPixels(getColorFromStream(&buffer[1]));
-			//setAllPixels(buffer[1]);
+			buffer[7] = 0x00;
+			color = strtoul(buffer + 1, NULL, 16);
+			setAllPixels(color);
 			break;
-		case 0x01:
+		case 'b':
 			/*
 			*	Set a single pixel's color
-			*	Format:	N RGB		Size: 5
+			*	Format:	N RGB		Size: 9
 			*	Where:	N = Pixel number, RGB = Color
 			*/
-			strip.setPixelColor(buffer[1], getColorFromStream(&buffer[2]));
+			buffer[9] = 0x00;
+			color = strtoul(buffer + 3, NULL, 16);
+			buffer[3] = 0x00;
+			index = strtoul(buffer + 1, NULL, 16);
+			strip.setPixelColor(index, color);
 			break;
 		default:
 			break;
 	}
 	strip.show();
-}
-
-uint32_t getColorFromStream(char *buffer) {
-	return strip.Color(buffer[0], buffer[1], buffer[2]);
 }
 
 void setAllPixels(uint32_t color) {
