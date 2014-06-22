@@ -2,8 +2,22 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>LED Strip Controller</title>
 	<script type="text/javascript" src="/webiopi.js"></script>
 	<script type="text/javascript">
+	var serial;
+	webiopi().ready(init);
+	
+	function init() {
+		serial = new Serial("uart");
+	}
+	
+	function sendColor() {
+		var color;
+		color = $("#selectedColor").val();
+		color = "07a" + color.slice(1,7);
+		serial.write(color);
+	}
 	</script>
 	
 	<style type="text/css">
@@ -11,5 +25,12 @@
 </head>
 
 <body>
+<form>
+  Select a color: <input type="color" id="selectedColor"><br>
+<input
+	type="button"
+	value="Send Color"
+	onclick="sendColor()">
+</form>
 </body>
 </html>
