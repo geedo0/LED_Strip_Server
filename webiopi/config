@@ -29,17 +29,17 @@
 [HTTP]
 # HTTP Server configuration
 enabled = true
-port = 8000
+port = 80
 
 # File containing sha256(base64("user:password"))
 # Use webiopi-passwd command to generate it
-passwd-file = /etc/webiopi/passwd
+#passwd-file = /etc/webiopi/passwd
 
 # Change login prompt message
-prompt = "WebIOPi"
+#prompt = "WebIOPi"
 
 # Use doc-root to change default HTML and resource files location
-#doc-root = /home/pi/webiopi/examples/scripts/macros
+doc-root = /home/geedo/led_strip_server/webiopi/html
 
 # Use welcome-file to change the default "Welcome" file
 #welcome-file = index.html
@@ -48,7 +48,7 @@ prompt = "WebIOPi"
 
 [COAP]
 # CoAP Server configuration
-enabled = true
+enabled = false
 port = 5683
 # Enable CoAP multicast
 multicast = true
@@ -68,7 +68,7 @@ multicast = true
 # Raspberry native UART on GPIO, uncomment to enable
 # Don't forget to remove console on ttyAMA0 in /boot/cmdline.txt
 # And also disable getty on ttyAMA0 in /etc/inittab
-#serial0 = Serial device:ttyAMA0 baudrate:9600
+uart	= Serial device:ttyAMA0 baudrate:9600
 
 # USB serial adapters
 #usb0 = Serial device:ttyUSB0 baudrate:9600
